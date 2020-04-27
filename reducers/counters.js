@@ -19,6 +19,7 @@ const initialState = {
 		},
 	],
 	isNewCounterAdding: false,
+	activeCounterId: null,
 };
 
 const counters = (state = initialState, { type, payload}) => {
@@ -42,6 +43,34 @@ const counters = (state = initialState, { type, payload}) => {
 			return {
 				...state,
 				counterList: state.counterList.filter(counter => counter.id !== payload.counterId),
+			};
+		}
+
+		case 'change-counter': {
+			return {
+				...state,
+				counterList: state.counterList.map(currentCounter => {
+					if (currentCounter.id === payload.id) {
+						return payload;
+					}
+
+					return currentCounter;
+				}),
+			};
+		}
+
+		case 'set-active-counter': {
+
+			return {
+				...state,
+				activeCounterId: payload || null,
+			};
+		}
+
+		case 'increase-counter': {
+			return {
+				...state,
+				activeCounterId: payload || null,
 			};
 		}
 

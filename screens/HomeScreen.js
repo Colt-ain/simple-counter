@@ -12,15 +12,21 @@ import {
 	View,
 } from 'react-native';
 import CounterList from '../components/CounterList';
+import Counter from '../components/Counter';
 
 class HomeScreen extends Component {
 	renderContent() {
-		const { isNewCounterAdding } = this.props;
+		const { isNewCounterAdding, activeCounter } = this.props;
 
 		switch(true) {
 			case isNewCounterAdding === true: {
 				return <AddNewCounterForm />;
 			}
+
+			case !!activeCounter: {
+				return <Counter counter={activeCounter}/>
+			}
+
 			default: return <CounterList/>;
 		}
 	}
@@ -38,8 +44,10 @@ class HomeScreen extends Component {
 	}
 }
 
-export default connect(({ counters: { isNewCounterAdding } }) => {
-	return { isNewCounterAdding };
+export default connect(({ counters: { isNewCounterAdding, activeCounterId, counterList } }) => {
+	const activeCounter = counterList.find(counter => counter.id === activeCounterId);
+
+	return { isNewCounterAdding, activeCounter };
 })(HomeScreen);
 
 HomeScreen.navigationOptions = {
